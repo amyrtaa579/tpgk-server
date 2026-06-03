@@ -13,8 +13,7 @@ FastAPI backend для Томского промышленно-гуманита�
 
 ```bash
 # 1. Клонировать репозиторий
-git clone https://github.com/Anmicius/tpgk-api.git
-cd tpgk-api
+git clone https://github.com/amyrtaa579/tpgk-server.git
 
 # 2. Создать виртуальное окружение
 python -m venv venv
