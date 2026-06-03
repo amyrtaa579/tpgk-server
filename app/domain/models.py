@@ -1,0 +1,210 @@
+"""Базовые классы доменной модели."""
+
+from dataclasses import dataclass, field
+from datetime import datetime
+from typing import Optional
+from uuid import uuid4
+
+
+@dataclass
+class BaseEntity:
+    """Базовый класс для всех сущностей."""
+    
+    id: int
+    created_at: datetime = field(default_factory=datetime.utcnow)
+    updated_at: datetime = field(default_factory=datetime.utcnow)
+
+
+@dataclass
+class Image:
+    """Модель изображения."""
+    
+    url: str
+    alt: str
+    caption: Optional[str] = None
+    thumbnail: Optional[str] = None
+
+
+@dataclass
+class SpecialtyEducationOption:
+    """Уровень образования специальности."""
+    id: Optional[int] = None
+    specialty_id: int = 0
+    education_level: str = ""  # "Основное общее", "Среднее общее"
+    duration: str = ""
+    budget_places: int = 0
+    paid_places: int = 0
+    created_at: Optional[datetime] = None
+    updated_at: Optional[datetime] = None
+
+
+@dataclass
+class Specialty(BaseEntity):
+    """Специальность колледжа."""
+
+    code: str = ""
+    name: str = ""
+    short_description: str = ""
+    description: list[str] = field(default_factory=list)
+    exams: list[str] = field(default_factory=list)
+    images: list[Image] = field(default_factory=list)
+    documents: list[Image] = field(default_factory=list)
+    education_options: list[SpecialtyEducationOption] = field(default_factory=list)
+
+
+@dataclass
+class InterestingFact(BaseEntity):
+    """Интересный факт о специальности."""
+    
+    specialty_code: str = ""
+    title: str = ""
+    description: list[str] = field(default_factory=list)
+    images: list[Image] = field(default_factory=list)
+
+
+@dataclass
+class News(BaseEntity):
+    """Новость колледжа."""
+    
+    title: str = ""
+    slug: str = ""
+    preview_text: str = ""
+    content: list[str] = field(default_factory=list)
+    preview_image: Optional[str] = None
+    gallery: list[Image] = field(default_factory=list)
+    published_at: datetime = field(default_factory=datetime.utcnow)
+    views: int = 0
+
+
+@dataclass
+class FAQDocument:
+    """Документ в FAQ."""
+
+    title: str = ""
+    file_url: str = ""
+    file_size: Optional[int] = None
+
+
+@dataclass
+class FAQ(BaseEntity):
+    """Часто задаваемый вопрос."""
+
+    question: str = ""
+    answer: str | list[str] = ""
+    category: str = ""
+    show_in_admission: bool = False
+    images: list[Image] = field(default_factory=list)
+    documents: list[FAQDocument] = field(default_factory=list)
+    document_file_ids: list[int] = field(default_factory=list)
+
+
+@dataclass
+class Document(BaseEntity):
+    """Документ для скачивания."""
+    
+    title: str = ""
+    category: str = ""
+    file_url: str = ""
+    file_size: Optional[int] = None
+    images: list[Image] = field(default_factory=list)
+
+
+@dataclass
+class GalleryImage(BaseEntity):
+    """Изображение в галерее."""
+    
+    url: str = ""
+    thumbnail: str = ""
+    alt: str = ""
+    category: str = ""
+    caption: Optional[str] = None
+    date_taken: Optional[datetime] = None
+
+
+@dataclass
+class TestQuestion(BaseEntity):
+    """Вопрос профориентационного теста."""
+
+    text: str = ""
+    options: list[str] = field(default_factory=list)
+    answer_scores: list[dict] = field(default_factory=list)  # [{"answer": "Да", "specialties": ["welder", "builder", "cook"]}]
+    image_url: Optional[str] = None
+    documents: list[Image] = field(default_factory=list)
+
+
+@dataclass
+class TestAnswer:
+    """Ответ пользователя на вопрос теста."""
+    
+    question_id: int
+    selected: str
+
+
+@dataclass
+class TestResult:
+    """Результат прохождения теста."""
+    
+    recommendation: str
+    motivation: str
+    recommended_specialties: list[str]
+
+
+@dataclass
+class AboutInfo:
+    """Информация о колледже."""
+    
+    title: str
+    description: list[str]
+    images: list[Image]
+
+
+@dataclass
+class SubmissionMethod:
+    """Способ подачи документов."""
+    
+    title: str
+    description: str
+    link: Optional[str] = None
+
+
+@dataclass
+class ImportantDate:
+    """Важная дата приёмной кампании."""
+    
+    title: str
+    date: datetime
+    description: Optional[str] = None
+
+
+@dataclass
+class AdmissionInfo:
+    """Информация о приёмной кампании."""
+
+    year: int
+    specialties_admission: list[dict]
+    submission_methods: list[SubmissionMethod]
+    important_dates: list[ImportantDate]
+
+
+@dataclass
+class DocumentFile(BaseEntity):
+    """Файл документа."""
+
+    title: str = ""
+    file_url: str = ""
+    file_size: Optional[int] = None
+    category: str = "common"
+
+
+@dataclass
+class User:
+    """Пользователь (администратор)."""
+
+    id: int
+    email: str
+    username: str
+    hashed_password: str = ""
+    is_active: bool = True
+    is_superuser: bool = False
+    created_at: datetime = field(default_factory=datetime.utcnow)
+    updated_at: datetime = field(default_factory=datetime.utcnow)

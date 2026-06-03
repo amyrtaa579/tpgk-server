@@ -1,0 +1,63 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+*.egg-info/
+dist/
+build/
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+
+# Database
+*.db
+*.sqlite3
+*.sqlite
+
+# Logs
+*.log
+logs/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Backup files
+*.bak
+*.backup
+*.tmp
+
+# Config files with secrets
+.anmicius-config.json
+.slowapi.env
+
+# Test and deployment scripts
+test_api.sh
+seed_data.sh
+scripts/ssl-cert.sh
+scripts/update-nginx-upstream.sh
+scripts/run_tests.sh
+scripts/create_admin.py
+scripts/create_superuser.py
+scripts/reset_admin_password.py
+scripts/migrate_test_questions.py
