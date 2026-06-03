@@ -828,7 +828,7 @@ class TestQuestionRepository(ITestQuestionRepository):
         from app.infrastructure.models import SpecialtyModel
 
         # Получаем все специальности из БД для маппинга кодов на данные
-        result = await self.session.execute(select(SpecialtyModel))
+        result = await self.session.execute(select(SpecialtyModel).options(selectinload(SpecialtyModel.education_options)))
         all_specialties = result.scalars().all()
         specialties_map = {s.code: s for s in all_specialties}
 

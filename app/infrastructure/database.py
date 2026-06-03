@@ -8,9 +8,12 @@ from app.core.config import get_settings
 settings = get_settings()
 
 engine = create_async_engine(
-    settings.get_database_url,
+    settings.database_url,
     echo=settings.debug,
     pool_pre_ping=True,
+    connect_args={
+        "ssl": False,
+    },
 )
 
 async_session_maker = async_sessionmaker(
@@ -38,10 +41,6 @@ async def get_db_session() -> AsyncSession:
 
 async def init_db():
     """Инициализация БД - проверка подключения."""
-    # Таблицы создаются через миграции Alembic, а не автоматически
-    # При необходимости можно раскомментировать для разработки:
-    # async with engine.begin() as conn:
-    #     await conn.run_sync(Base.metadata.create_all)
     pass
 
 

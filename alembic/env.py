@@ -42,33 +42,24 @@ def get_url():
     """Get database URL from environment or config."""
     import os
     from app.core.config import get_settings
-    
+
     # Сначала пробуем получить из переменной окружения
     url = os.getenv("DATABASE_URL")
     if url:
         return url
-    
+
     # Если нет, используем настройки приложения
     try:
         settings = get_settings()
-        return settings.get_database_url
+        return settings.database_url
     except Exception:
         # Fallback на стандартный URL (для совместимости)
         return "postgresql+asyncpg://anmicius:anmicius_secret_password@postgres:5432/anmicius_db"
 
 
 def run_migrations_offline() -> None:
-    """Run migrations in 'offline' mode.
+    """Run migrations in 'offline' mode."""
 
-    This configures the context with just a URL
-    and not an Engine, though an Engine is acceptable
-    here as well.  By skipping the Engine creation
-    we don't even need a DBAPI to be available.
-
-    Calls to context.execute() here emit the given string to the
-    script output.
-
-    """
     url = get_url()
     context.configure(
         url=url,
@@ -95,27 +86,17 @@ def do_run_migrations(connection: Connection) -> None:
 
 async def run_async_migrations() -> None:
     """Run migrations in 'online' mode with async engine."""
-    
-    configuration = config.get_section(config.config_ini_section)
-    configuration["sqlalchemy.url"] = get_url()
-    
-    connectable = async_engine_from_config(
-        configuration,
-        prefix="sqlalchemy.",
-        poolclass=pool.NullPool,
-    )
+    from app.infrastructure.database import engine
 
-    async with connectable.connect() as connection:
+    async with engine.connect() as connection:
         await connection.run_sync(do_run_migrations)
 
-    await connectable.dispose()
+    await engine.dispose()
 
 
 def run_migrations_online() -> None:
     """Run migrations in 'online' mode."""
-    
     import asyncio
-    
     asyncio.run(run_async_migrations())
 
 
