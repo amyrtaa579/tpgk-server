@@ -54,7 +54,6 @@ Swagger: http://localhost:8000/docs
 │   ├── infrastructure/    # БД, Redis, MinIO, репозитории
 │   └── presentation/      # Роуты и Pydantic-схемы
 ├── alembic/               # Миграции
-├── tests/                 # Тесты
 ├── .env.example           # Пример переменных окружения
 ├── init-admin.py          # Создание админа
 └── requirements.txt       # Зависимости
